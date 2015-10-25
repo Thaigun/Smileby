@@ -10,6 +10,7 @@ import android.content.Intent;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
+import com.firebase.client.Firebase;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,13 +18,18 @@ import java.util.UUID;
 /**
  * Created by Antti on 14.10.2015.
  */
-public class MyApplication extends Application {
+public class GlobalApplication extends Application {
 
     private BeaconManager beaconManager;
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Firebase.setAndroidContext(this);
+
+        Firebase myFireBaseRef = new Firebase("https://radiant-heat-4424.firebaseio.com/");
+
         beaconManager = new BeaconManager(getApplicationContext());
 
         beaconManager.setMonitoringListener(new BeaconManager.MonitoringListener() {
