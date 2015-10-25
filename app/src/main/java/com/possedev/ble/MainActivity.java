@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
                     Beacon nearestBeacon = list.get(0);
                     List<String> places = placesNearBeacon(nearestBeacon);
                     //TODO: Update the UI here: Hint, hint, list view ;)
+
+
                     Log.d("Airport", "Nearest places: " + places);
                 }
             }

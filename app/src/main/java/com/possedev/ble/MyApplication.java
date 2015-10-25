@@ -29,12 +29,12 @@ public class MyApplication extends Application {
         beaconManager.setMonitoringListener(new BeaconManager.MonitoringListener() {
             @Override
             public void onEnteredRegion(Region region, List<Beacon>list) {
-                showNotification("You entered the area", "Touch to open BLE app");
+                //showNotification("You entered the area", "Touch to open BLE app");
             }
 
             @Override
             public void onExitedRegion(Region region) {
-                showNotification("Exit title", "Exit message");
+                //showNotification("Exit title", "Exit message");
             }
         });
 
