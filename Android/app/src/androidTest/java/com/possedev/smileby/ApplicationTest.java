@@ -1,4 +1,4 @@
-package com.possedev.ble;
+package com.possedev.smileby;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

@@ -1,4 +1,4 @@
-package com.possedev.ble;
+package com.possedev.smileby;
 
 import android.app.Application;
 import android.app.Notification;
@@ -10,7 +10,11 @@ import android.content.Intent;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+import com.possedev.smileby.structures.AppSettings;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,6 +25,9 @@ import java.util.UUID;
 public class GlobalApplication extends Application {
 
     private BeaconManager beaconManager;
+    private Firebase firebaseRef;
+    public String userName;
+    public AppSettings settings = new AppSettings();
 
     @Override
     public void onCreate() {
@@ -28,13 +35,25 @@ public class GlobalApplication extends Application {
 
         Firebase.setAndroidContext(this);
 
-        Firebase myFireBaseRef = new Firebase("https://radiant-heat-4424.firebaseio.com/");
+        firebaseRef = new Firebase("https://radiant-heat-4424.firebaseio.com/");
 
         beaconManager = new BeaconManager(getApplicationContext());
 
         beaconManager.setMonitoringListener(new BeaconManager.MonitoringListener() {
             @Override
-            public void onEnteredRegion(Region region, List<Beacon>list) {
+            public void onEnteredRegion(Region region, List<Beacon> list) {
+                firebaseRef.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+
+                        //Log.e("Smileby", snapshot.getValue().toString());  //prints "Do you have data? You'll love Firebase."
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError error) {
+                    }
+                });
+
                 //showNotification("You entered the area", "Touch to open BLE app");
             }
 
