@@ -14,7 +14,6 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.possedev.smileby.structures.AppSettings;
 
 import java.util.List;
 import java.util.UUID;
@@ -42,17 +41,21 @@ public class GlobalApplication extends Application {
         beaconManager.setMonitoringListener(new BeaconManager.MonitoringListener() {
             @Override
             public void onEnteredRegion(Region region, List<Beacon> list) {
+                //get the beacon ids
+                //find the corresponding user for the beacon if one exists
                 firebaseRef.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
 
-                        //Log.e("Smileby", snapshot.getValue().toString());  //prints "Do you have data? You'll love Firebase."
+                        //snapshot.getValue().toString());
                     }
 
                     @Override
                     public void onCancelled(FirebaseError error) {
                     }
                 });
+                //Increment the encounters by one
+                //If enough encounters, show notification to open the quick message option.
 
                 //showNotification("You entered the area", "Touch to open BLE app");
             }

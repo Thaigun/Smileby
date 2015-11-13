@@ -1,22 +1,18 @@
 package com.possedev.smileby.structures;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Antti on 5.11.2015.
  */
 public class SmilebyUser {
-    private String username;
     private String beaconuuid;
     private String beaconmajor;
     private String beaconminor;
-    private List<SmilebyUserChat> chats;
+    private Map<String, String> chats; //id: user
 
     public SmilebyUser() {}
 
-    public String getUsername() {
-        return username;
-    }
     public String getBeaconuuid() {
         return beaconuuid;
     }
@@ -26,7 +22,5 @@ public class SmilebyUser {
     public String getBeaconminor() {
         return beaconminor;
     }
-    public List<SmilebyUserChat> getChats() {
-        return chats;
-    }
+    public Map<String, String> getChats() { return chats; }
 }

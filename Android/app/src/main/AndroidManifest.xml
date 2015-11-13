@@ -2,23 +2,31 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.possedev.smileby" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
-        android:name="com.possedev.smileby.GlobalApplication"
+        android:name=".GlobalApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.possedev.smileby.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
+        <activity
+            android:theme="@android:style/Theme.Dialog"
+            android:name=".UsernameActivity"
+            android:label="@string/title_activity_username" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-    <uses-permission android:name="android.permission.INTERNET" />
+            </intent-filter>
+        </activity>
+    </application>
 
 </manifest>
