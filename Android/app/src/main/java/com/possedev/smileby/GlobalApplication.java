@@ -65,7 +65,7 @@ public class GlobalApplication extends Application {
                             //The user that was encountered
                             latestEncounter = match.getValue(User.class);
                             //Increment the encounters by one
-                            incrementEncounters(settings.getUsername(), match.getKey());
+                            incrementEncounters(match.getKey());
                         }
                     }
 
@@ -89,7 +89,8 @@ public class GlobalApplication extends Application {
         });
     }
 
-    public void incrementEncounters(final String user1, final String user2) {
+    public void incrementEncounters(final String user2) {
+        final String user1 = settings.getUsername();
         //find the correct pair of encounters.
         final String first = (user1.compareTo(user2) < 0) ? user1 : user2;
         final String second = (first == user1) ? user2 : user1;
@@ -102,7 +103,7 @@ public class GlobalApplication extends Application {
             public void onDataChange(DataSnapshot snapshot) {
                 //The matching child nodes
                 Iterator<DataSnapshot> children = snapshot.getChildren().iterator();
-                while(children.hasNext()) {
+                while (children.hasNext()) {
                     DataSnapshot child = children.next();
                     Encounter encounter = child.getValue(Encounter.class);
                     if (encounter.getUser2().equals(second)) {
@@ -110,6 +111,9 @@ public class GlobalApplication extends Application {
                         firebaseRef.child("encounters/" + child.getKey() + "/encounters").setValue(newNumber);
                         //If enough encounters, show notification to open the quick message option.
                         if (newNumber >= 3) {
+                            if (newNumber == 3) {
+                                saveNewChat(user2);
+                            }
                             openQuickMessage(user2);
                         }
                     }
@@ -121,6 +125,10 @@ public class GlobalApplication extends Application {
 
             }
         });
+
+    }
+
+    private void saveNewChat(String userName) {
 
     }
 
@@ -137,6 +145,7 @@ public class GlobalApplication extends Application {
                 .setContentTitle(title)
                 .setContentText(message)
                 .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
                 .build();
         notification.defaults |= Notification.DEFAULT_SOUND;
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
