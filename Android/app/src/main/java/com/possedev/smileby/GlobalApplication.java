@@ -18,6 +18,7 @@ import com.firebase.client.ValueEventListener;
 import com.possedev.smileby.structures.Encounter;
 import com.possedev.smileby.structures.User;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -72,13 +73,6 @@ public class GlobalApplication extends Application {
                     public void onCancelled(FirebaseError error) {
                     }
                 });
-
-
-
-
-                //If enough encounters, show notification to open the quick message option.
-
-                //showNotification("You entered the area", "Touch to open BLE app");
             }
 
             @Override
@@ -106,12 +100,18 @@ public class GlobalApplication extends Application {
             // The onDataChange will be launched for each "encounter" where user1 is found.
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                Encounter encounter = snapshot.getValue(Encounter.class);
-                if (encounter.getUser2() == second) {
-                    int newNumber = encounter.getEncounters() + 1;
-                    firebaseRef.child("encounters/" + snapshot.getKey() + "/encounters").setValue(newNumber);
-                    if (newNumber >= 3) {
-                        openQuickMessage(user2);
+                //The matching child nodes
+                Iterator<DataSnapshot> children = snapshot.getChildren().iterator();
+                while(children.hasNext()) {
+                    DataSnapshot child = children.next();
+                    Encounter encounter = child.getValue(Encounter.class);
+                    if (encounter.getUser2().equals(second)) {
+                        int newNumber = encounter.getEncounters() + 1;
+                        firebaseRef.child("encounters/" + child.getKey() + "/encounters").setValue(newNumber);
+                        //If enough encounters, show notification to open the quick message option.
+                        if (newNumber >= 3) {
+                            openQuickMessage(user2);
+                        }
                     }
                 }
             }
