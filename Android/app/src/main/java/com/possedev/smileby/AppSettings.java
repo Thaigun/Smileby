@@ -1,6 +1,5 @@
 package com.possedev.smileby;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -9,14 +8,17 @@ import java.util.Random;
 /**
  * Created by Antti on 12.11.2015.
  */
-public class AppSettings extends Application {
+public class AppSettings {
     SharedPreferences preferences;
 
-    public AppSettings() {
-        preferences = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+    public AppSettings(Context context) {
+        //TODO: make this work: String fileName = getResources().getString(R.string.preference_file_key);
+        preferences = context.getSharedPreferences("com.possedev.smileby.USER_SETTINGS", Context.MODE_PRIVATE);
+        preferences.edit().commit();
         if (getUsername().isEmpty()) {
             Random random = new Random();
-            setUsername("User" + random.nextInt(2000));
+            //setUsername("User" + random.nextInt(2000));
+            setUsername("anabanana");
         }
     }
 
@@ -25,7 +27,9 @@ public class AppSettings extends Application {
     }
 
     public void setPreferencesValueString(String key, String value) {
-        preferences.edit().putString(key, value);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(key, value);
+        editor.commit();
     }
 
     public String getUsername() {

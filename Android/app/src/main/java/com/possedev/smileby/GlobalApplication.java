@@ -13,7 +13,10 @@ import com.estimote.sdk.Region;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
+import com.possedev.smileby.structures.Encounter;
+import com.possedev.smileby.structures.User;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,11 +29,15 @@ public class GlobalApplication extends Application {
     private BeaconManager beaconManager;
     private Firebase firebaseRef;
     public String userName;
-    public AppSettings settings = new AppSettings();
+    public AppSettings settings;
+
+    public User latestEncounter;
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        settings = new AppSettings(this);
 
         Firebase.setAndroidContext(this);
 
@@ -41,20 +48,34 @@ public class GlobalApplication extends Application {
         beaconManager.setMonitoringListener(new BeaconManager.MonitoringListener() {
             @Override
             public void onEnteredRegion(Region region, List<Beacon> list) {
-                //get the beacon ids
+                //get the beacon ids: region.getProximityUUID(), getMajor(), getMinor()
+                //TODO: Beacon with no major or minor value?
+                Beacon firstBeacon = list.get(0);
+                String beaconID = region.getProximityUUID() + "|" + firstBeacon.getMajor() + "|" + firstBeacon.getMinor();
+
                 //find the corresponding user for the beacon if one exists
-                firebaseRef.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                Query ownerQuery = firebaseRef.child("users").orderByChild("beaconid").equalTo(beaconID);
+                ownerQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
-
-                        //snapshot.getValue().toString());
+                        if (snapshot.getChildrenCount() == 1) {
+                            //The matching child node
+                            DataSnapshot match = snapshot.getChildren().iterator().next();
+                            //The user that was encountered
+                            latestEncounter = match.getValue(User.class);
+                            //Increment the encounters by one
+                            incrementEncounters(settings.getUsername(), match.getKey());
+                        }
                     }
 
                     @Override
                     public void onCancelled(FirebaseError error) {
                     }
                 });
-                //Increment the encounters by one
+
+
+
+
                 //If enough encounters, show notification to open the quick message option.
 
                 //showNotification("You entered the area", "Touch to open BLE app");
@@ -69,13 +90,46 @@ public class GlobalApplication extends Application {
         beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
             @Override
             public void onServiceReady() {
-                beaconManager.startMonitoring(new Region("monitored region", UUID.fromString("b9407f30-f5f8-466e-aff9-25556b57fe6d"), 16432, 59483));
+                beaconManager.startMonitoring(new Region("monitored region", UUID.fromString("b9407f30-f5f8-466e-aff9-25556b57fe6d"), null, null));
             }
         });
     }
 
+    public void incrementEncounters(final String user1, final String user2) {
+        //find the correct pair of encounters.
+        final String first = (user1.compareTo(user2) < 0) ? user1 : user2;
+        final String second = (first == user1) ? user2 : user1;
+
+        Query query = firebaseRef.child("encounters").orderByChild("user1").equalTo(first);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            // The onDataChange will be launched for each "encounter" where user1 is found.
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Encounter encounter = snapshot.getValue(Encounter.class);
+                if (encounter.getUser2() == second) {
+                    int newNumber = encounter.getEncounters() + 1;
+                    firebaseRef.child("encounters/" + snapshot.getKey() + "/encounters").setValue(newNumber);
+                    if (newNumber >= 3) {
+                        openQuickMessage(user2);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+    }
+
+    public void openQuickMessage(String username) {
+        showNotification("New familiar stranger", "Tap to send an emotion");
+    }
+
     public void showNotification(String title, String message) {
-        Intent notifyIntent = new Intent(this, MainActivity.class);
+        Intent notifyIntent = new Intent(this, EmotionActivity.class);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivities(this, 0, new Intent[] { notifyIntent}, PendingIntent.FLAG_UPDATE_CURRENT);
         Notification notification = new Notification.Builder(this)
