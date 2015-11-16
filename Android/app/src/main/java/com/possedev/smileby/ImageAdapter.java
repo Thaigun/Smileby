@@ -38,7 +38,7 @@ public class ImageAdapter extends BaseAdapter {
         if (convertView == null) {
             //if it is not recycled, initialize some attributes
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(85,85));
+            imageView.setLayoutParams(new GridView.LayoutParams(200,200)); //TODO: How to scale to the screen? In layout .xml, there was something.
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(8, 8, 8, 8);
         } else {
@@ -51,16 +51,8 @@ public class ImageAdapter extends BaseAdapter {
 
     //References to our images
     private Integer[] mThumbIds = {
-            R.drawable.sample_2, R.drawable.sample_3,
-            R.drawable.sample_4, R.drawable.sample_5,
-            R.drawable.sample_6, R.drawable.sample_7,
-            R.drawable.sample_0, R.drawable.sample_1,
-            R.drawable.sample_2, R.drawable.sample_3,
-            R.drawable.sample_4, R.drawable.sample_5,
-            R.drawable.sample_6, R.drawable.sample_7,
-            R.drawable.sample_0, R.drawable.sample_1,
-            R.drawable.sample_2, R.drawable.sample_3,
-            R.drawable.sample_4, R.drawable.sample_5,
-            R.drawable.sample_6, R.drawable.sample_7
+            R.drawable.sample_0, R.drawable.sample_1, R.drawable.sample_2,
+            R.drawable.sample_3, R.drawable.sample_4, R.drawable.sample_5,
+            R.drawable.sample_6, R.drawable.sample_7, R.drawable.sample_8
     };
 }

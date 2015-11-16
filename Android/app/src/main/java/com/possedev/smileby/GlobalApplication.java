@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
@@ -18,8 +19,10 @@ import com.firebase.client.ValueEventListener;
 import com.possedev.smileby.structures.Encounter;
 import com.possedev.smileby.structures.User;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -129,7 +132,14 @@ public class GlobalApplication extends Application {
     }
 
     private void saveNewChat(String userName) {
-
+        //Make a Map (supported by Firebase) of members of the chat. The users are keys, and values are just some placeholder booleans
+        Map<String, Object> chatUsers = new HashMap<String, Object>();
+        chatUsers.put(settings.getUsername(), true);
+        chatUsers.put(userName, true);
+        //push a new generated object to chats.
+        Firebase newChatRef = firebaseRef.child("chats").push();
+        //Insert one entry for the members of the chat
+        newChatRef.child("members").updateChildren(chatUsers);
     }
 
     public void openQuickMessage(String username) {
