@@ -1,13 +1,17 @@
 package com.possedev.smileby;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
+import com.possedev.smileby.helper_classes.ChatView;
 
 public class MainActivity extends AppCompatActivity {
     private BeaconManager beaconManager;
@@ -20,6 +24,17 @@ public class MainActivity extends AppCompatActivity {
 
         ListView listView = (ListView) findViewById(R.id.beacon_list);
         listView.setAdapter(new ChatListAdapter(this));
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW)
+                    .setClass(MainActivity.this, com.possedev.smileby.EmotionActivity.class)
+                    .putExtra("chatKey", ((ChatView) view).chat.getKey());
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

@@ -1,9 +1,12 @@
 package com.possedev.smileby;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.estimote.sdk.repackaged.okhttp_v2_2_0.com.squareup.okhttp.internal.DiskLruCache;
 import com.firebase.client.ChildEventListener;
@@ -11,6 +14,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.possedev.smileby.helper_classes.Chat;
+import com.possedev.smileby.helper_classes.ChatView;
 
 import java.util.ArrayList;
 
@@ -21,15 +25,19 @@ public class ChatListAdapter extends BaseAdapter {
     private Firebase userChatsRef;
     private Firebase chatRef;
     private AppSettings settings;
+    private Context mContext;
 
     public ChatListAdapter(Context context) {
+        mContext = context;
         settings = new AppSettings(context);
+        chats = new ArrayList<Chat>();
         userChatsRef = new Firebase("https://radiant-heat-4424.firebaseio.com/users/"+settings.getUsername()+"/chats");
         userChatsRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Chat newChat = chatFromSnapshot(dataSnapshot);
-                //TODO: add the newChat to the list of chats (and to the UI).
+                chats.add(newChat);
+                notifyDataSetChanged();
             }
 
             @Override
@@ -56,7 +64,7 @@ public class ChatListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 0;
+        return chats.size();
     }
 
     @Override
@@ -71,12 +79,23 @@ public class ChatListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
+        ChatView chatView;
+        if (convertView == null) {
+            //if it is not recycled, initialize some attributes
+            chatView = new ChatView(mContext);
+            chatView.chat = chats.get(position);
+        } else {
+            chatView = (ChatView) convertView;
+        }
+        chatView.setText(chatView.chat.getFriend());
+        return chatView;
     }
 
     private ArrayList<Chat> chats;
 
     private Chat chatFromSnapshot(DataSnapshot snapshot) {
-        return new Chat("abc");
+        String friend = (String) snapshot.getValue();
+        String key = (String) snapshot.getKey();
+        return new Chat(key, friend);
     }
 }

@@ -1,5 +1,6 @@
 package com.possedev.smileby;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,6 +16,8 @@ public class EmotionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emotion);
+
+        Intent startingIntent = getIntent();
 
         GridView gridView = (GridView) findViewById(R.id.gridView);
         gridView.setAdapter(new ImageAdapter(this));

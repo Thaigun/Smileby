@@ -8,13 +8,15 @@ import com.possedev.smileby.structures.User;
  */
 public class Chat {
     private String key;
-    private User friend;
+    private String friend;
     private Message[] messages;
 
-    public Chat(String keyStr) {
+    public Chat(String keyStr, String friendStr) {
         key = keyStr;
+        friend = friendStr;
     }
 
-    public User getFriend() { return friend; }
+    public String getKey() { return key; }
+    public String getFriend() { return friend; }
     public Message[] getMessages() { return messages; }
 }
