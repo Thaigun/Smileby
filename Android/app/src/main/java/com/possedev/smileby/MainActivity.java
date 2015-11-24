@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ListView listView = (ListView) findViewById(R.id.beacon_list);
+        listView.setAdapter(new ChatListAdapter(this));
     }
 
     @Override

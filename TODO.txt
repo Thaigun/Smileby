@@ -1,2 +1,4 @@
-1. Add to the database a new chat when 3 encounters
-2. List met people in the main page -> Link to the Emotion-page
+Add to the database a new chat when 3 encounters
+List met people in the main page -> Link to the Emotion-page
+
+Add listener to the chats object for the user so that when a new chat is created, both members will be notified.

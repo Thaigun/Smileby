@@ -6,7 +6,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
@@ -132,7 +131,7 @@ public class GlobalApplication extends Application {
     }
 
     private void saveNewChat(String userName) {
-        //Make a Map (supported by Firebase) of members of the chat. The users are keys, and values are just some placeholder booleans
+        //Make a Map (supported by Firebase) of members of the chat. The users are the keys, and values are just some placeholder booleans
         Map<String, Object> chatUsers = new HashMap<String, Object>();
         chatUsers.put(settings.getUsername(), true);
         chatUsers.put(userName, true);
@@ -140,6 +139,20 @@ public class GlobalApplication extends Application {
         Firebase newChatRef = firebaseRef.child("chats").push();
         //Insert one entry for the members of the chat
         newChatRef.child("members").updateChildren(chatUsers);
+
+        // Add the chat id to both users' chats list.
+        saveChatIdToBothChatMembers(settings.getUsername(), userName, newChatRef.getKey());
+    }
+
+    private void saveChatIdToBothChatMembers(String user1, String user2, String chatKey) {
+        saveChatIdToUserReferenceForUser(user1, chatKey, user2);
+        saveChatIdToUserReferenceForUser(user2, chatKey, user1);
+    }
+
+    private void saveChatIdToUserReferenceForUser(String userWhereSaveTo, String chatKey, String otherMember) {
+        Map<String, Object> chatKeyToUser = new HashMap<String, Object>();
+        chatKeyToUser.put(chatKey, otherMember);
+        firebaseRef.child("users/"+userWhereSaveTo+"/chats").updateChildren(chatKeyToUser);
     }
 
     public void openQuickMessage(String username) {
