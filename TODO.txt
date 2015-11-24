@@ -1,2 +1,2 @@
-#1. Add to the database a new chat when 3 encounters
+1. Add to the database a new chat when 3 encounters
 2. List met people in the main page -> Link to the Emotion-page
