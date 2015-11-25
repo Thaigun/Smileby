@@ -1,4 +1,4 @@
-package com.possedev.smileby;
+package com.possedev.smileby.adapters;
 
 import android.content.Context;
 import android.view.View;
@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+
+import com.possedev.smileby.R;
 
 /**
  * Created by Antti on 16.11.2015.

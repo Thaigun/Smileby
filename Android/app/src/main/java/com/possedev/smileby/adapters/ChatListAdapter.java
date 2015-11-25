@@ -1,4 +1,4 @@
-package com.possedev.smileby;
+package com.possedev.smileby.adapters;
 
 import android.content.Context;
 import android.util.Log;
@@ -13,6 +13,7 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.possedev.smileby.AppSettings;
 import com.possedev.smileby.helper_classes.Chat;
 import com.possedev.smileby.helper_classes.ChatView;
 

@@ -8,9 +8,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.possedev.smileby.adapters.ImageAdapter;
+
 public class EmotionActivity extends AppCompatActivity {
+    private String friend;
+    private String key;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,15 +24,22 @@ public class EmotionActivity extends AppCompatActivity {
 
         Intent startingIntent = getIntent();
 
+        friend = startingIntent.getStringExtra("friend");
+        key = startingIntent.getStringExtra("key");
+        setTitle(friend);
+
+        //Build the grid view
         GridView gridView = (GridView) findViewById(R.id.gridView);
         gridView.setAdapter(new ImageAdapter(this));
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(EmotionActivity.this, "" + position, Toast.LENGTH_SHORT).show();
+                sendMessage();
             }
         });
+
+        //TODO: Build the horizontal layout, check the layout .xml
     }
 
     @Override
@@ -50,5 +62,9 @@ public class EmotionActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void sendMessage() {
+
     }
 }

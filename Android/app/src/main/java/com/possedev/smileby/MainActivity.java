@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
+import com.possedev.smileby.adapters.ChatListAdapter;
 import com.possedev.smileby.helper_classes.ChatView;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW)
                     .setClass(MainActivity.this, com.possedev.smileby.EmotionActivity.class)
-                    .putExtra("chatKey", ((ChatView) view).chat.getKey());
+                    .putExtra("key", ((ChatView) view).chat.getKey())
+                    .putExtra("friend", ((ChatView) view).chat.getFriend());
                 startActivity(intent);
             }
         });
