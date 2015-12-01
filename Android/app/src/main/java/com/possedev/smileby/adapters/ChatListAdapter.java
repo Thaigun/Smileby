@@ -1,14 +1,10 @@
 package com.possedev.smileby.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
-import com.estimote.sdk.repackaged.okhttp_v2_2_0.com.squareup.okhttp.internal.DiskLruCache;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -96,7 +92,7 @@ public class ChatListAdapter extends BaseAdapter {
 
     private Chat chatFromSnapshot(DataSnapshot snapshot) {
         String friend = (String) snapshot.getValue();
-        String key = (String) snapshot.getKey();
+        String key = snapshot.getKey();
         return new Chat(key, friend);
     }
 }

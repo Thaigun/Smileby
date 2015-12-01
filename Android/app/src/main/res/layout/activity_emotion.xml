@@ -10,6 +10,13 @@
     tools:context="com.possedev.smileby.EmotionActivity">
 
 
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/messagesView"
+        android:layout_weight="1"></ListView>
+
+
     <GridView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/gridView"
         android:layout_width="match_parent"
@@ -21,13 +28,5 @@
         android:horizontalSpacing="10dp"
         android:stretchMode="columnWidth"
         android:gravity="center" />
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal"
-        android:id="@+id/listView"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1"  >
-    </LinearLayout>
 
 </LinearLayout>
