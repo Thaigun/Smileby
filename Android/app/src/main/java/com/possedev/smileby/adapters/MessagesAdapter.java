@@ -1,10 +1,16 @@
 package com.possedev.smileby.adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
+import com.possedev.smileby.AppSettings;
+import com.possedev.smileby.R;
 import com.possedev.smileby.structures.Message;
 
 import java.util.ArrayList;
@@ -14,19 +20,24 @@ import java.util.ArrayList;
  */
 public class MessagesAdapter extends BaseAdapter {
     private Context context;
+    private AppSettings settings;
 
     public MessagesAdapter(Context c) {
         context = c;
+        settings = new AppSettings(c);
+        //REMOVE THIS SAMPLE MESSAGE
+        messages.add(new Message("blaa", "sample_0.jpg"));
+        //REMOVE THIS SAMPLE MESSAGE
     }
 
     @Override
     public int getCount() {
-        return 0;
+        return messages.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return messages.get(position);
     }
 
     @Override
@@ -36,7 +47,22 @@ public class MessagesAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
+        TextView view;
+        if (convertView == null) {
+            //TODO: This does not work
+            view = new TextView(context);
+
+            Message message = messages.get(position);
+            Resources resources = context.getResources();
+            final int resourceId = resources.getIdentifier(message.getMessage(), "drawable", context.getPackageName());
+            Drawable drawable = ContextCompat.getDrawable(context, resourceId);
+
+            view.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+        } else {
+            view = (TextView) convertView;
+        }
+
+        return view;
     }
 
     public ArrayList<Message> messages = new ArrayList<Message>();
