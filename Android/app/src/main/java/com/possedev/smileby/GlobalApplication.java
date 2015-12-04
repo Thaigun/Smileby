@@ -44,7 +44,7 @@ public class GlobalApplication extends Application {
 
         Firebase.setAndroidContext(this);
 
-        firebaseRef = new Firebase("https://radiant-heat-4424.firebaseio.com/");
+        firebaseRef = new Firebase(getResources().getString(R.string.firebase_url));
 
         beaconManager = new BeaconManager(getApplicationContext());
 

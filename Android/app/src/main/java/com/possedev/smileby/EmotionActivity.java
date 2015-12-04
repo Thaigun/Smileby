@@ -41,7 +41,7 @@ public class EmotionActivity extends AppCompatActivity {
 
         //TODO: Build the messages list.
         ListView messagesView = (ListView) findViewById(R.id.messagesView);
-        messagesView.setAdapter(new MessagesAdapter(this));
+        messagesView.setAdapter(new MessagesAdapter(this, friend, key));
     }
 
     @Override

@@ -7,4 +7,5 @@
     <string name="title_activity_username">UsernameActivity</string>
     <string name="username_input">Username</string>
     <string name="title_activity_emotion">Send Emotions</string>
+    <string name="firebase_url">https://radiant-heat-4424.firebaseio.com/</string>
 </resources>

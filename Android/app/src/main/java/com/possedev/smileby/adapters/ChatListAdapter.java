@@ -10,6 +10,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.possedev.smileby.AppSettings;
+import com.possedev.smileby.R;
 import com.possedev.smileby.helper_classes.Chat;
 import com.possedev.smileby.helper_classes.ChatView;
 
@@ -20,7 +21,6 @@ import java.util.ArrayList;
  */
 public class ChatListAdapter extends BaseAdapter {
     private Firebase userChatsRef;
-    private Firebase chatRef;
     private AppSettings settings;
     private Context mContext;
 
@@ -28,7 +28,9 @@ public class ChatListAdapter extends BaseAdapter {
         mContext = context;
         settings = new AppSettings(context);
         chats = new ArrayList<Chat>();
-        userChatsRef = new Firebase("https://radiant-heat-4424.firebaseio.com/users/"+settings.getUsername()+"/chats");
+
+        String firebaseUrl = mContext.getResources().getString(R.string.firebase_url);
+        userChatsRef = new Firebase(firebaseUrl+"users/"+settings.getUsername()+"/chats");
         userChatsRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
