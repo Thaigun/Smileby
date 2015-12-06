@@ -2,6 +2,8 @@ package com.possedev.smileby.adapters;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -32,7 +34,7 @@ public class MessagesAdapter extends BaseAdapter {
         settings = new AppSettings(c);
         friend = friendStr;
         key = keyStr;
-        
+
         String firebaseUrl = mContext.getResources().getString(R.string.firebase_url);
         firebaseRef = new Firebase(firebaseUrl + "chats/" + key + "/messages");
         firebaseRef.addChildEventListener(new ChildEventListener() {
@@ -90,7 +92,11 @@ public class MessagesAdapter extends BaseAdapter {
             Resources resources = mContext.getResources();
             final int resourceId = resources.getIdentifier(message.getMessage(), "drawable", mContext.getPackageName());
 
-            view.setCompoundDrawablesWithIntrinsicBounds(resourceId, 0,0,0);
+            Drawable drawable = ContextCompat.getDrawable(mContext, resourceId);
+            drawable.setBounds(0, 0, 100, 100);
+
+            view.setText(message.getSender());
+            view.setCompoundDrawables(drawable, null, null, null);
         } else {
             view = (TextView) convertView;
         }

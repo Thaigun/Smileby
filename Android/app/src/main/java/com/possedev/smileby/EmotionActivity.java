@@ -10,12 +10,16 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
 
+import com.firebase.client.Firebase;
 import com.possedev.smileby.adapters.ImageAdapter;
 import com.possedev.smileby.adapters.MessagesAdapter;
+import com.possedev.smileby.helper_classes.EmotionImageView;
+import com.possedev.smileby.structures.Message;
 
 public class EmotionActivity extends AppCompatActivity {
     private String friend;
-    private String key;
+    private String chatKey;
+    private AppSettings settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +29,10 @@ public class EmotionActivity extends AppCompatActivity {
         Intent startingIntent = getIntent();
 
         friend = startingIntent.getStringExtra("friend");
-        key = startingIntent.getStringExtra("key");
+        chatKey = startingIntent.getStringExtra("key");
         setTitle(friend);
+
+        settings = new AppSettings(this);
 
         //Build the grid view
         GridView gridView = (GridView) findViewById(R.id.gridView);
@@ -35,13 +41,13 @@ public class EmotionActivity extends AppCompatActivity {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                sendMessage();
+                sendMessage(view);
             }
         });
 
-        //TODO: Build the messages list.
+        //Build the messages list.
         ListView messagesView = (ListView) findViewById(R.id.messagesView);
-        messagesView.setAdapter(new MessagesAdapter(this, friend, key));
+        messagesView.setAdapter(new MessagesAdapter(this, friend, chatKey));
     }
 
     @Override
@@ -66,7 +72,13 @@ public class EmotionActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void sendMessage() {
+    private void sendMessage(View view) {
+        EmotionImageView eView = (EmotionImageView) view;
 
+        Message message = new Message(settings.getUsername(), eView.message);
+
+        String firebaseUrl = getResources().getString(R.string.firebase_url);
+        Firebase firebaseRef = new Firebase(firebaseUrl + "chats/" + chatKey + "/messages");
+        firebaseRef.push().setValue(message);
     }
 }
