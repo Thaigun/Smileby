@@ -156,12 +156,39 @@ public class GlobalApplication extends Application {
     }
 
     public void openQuickMessage(String username) {
-        showNotification("New familiar stranger", "Tap to send an emotion");
+        final String friend = username;
+        Firebase tempFirebase = firebaseRef.child("chats");
+        Query query = tempFirebase.orderByChild("members/" + settings.getUsername());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterator<DataSnapshot> chatIterator = dataSnapshot.getChildren().iterator();
+                while (chatIterator.hasNext()) {
+                    DataSnapshot nextChat = chatIterator.next();
+                    Iterator<DataSnapshot> members = nextChat.child("members").getChildren().iterator();
+                    while (members.hasNext()) {
+                        String nextMember = members.next().getKey();
+                        if (nextMember.equals(friend)) {
+                            showNotification("You met a familiar stranger", "Tap to send an emotion to " + friend, friend, nextChat.getKey());
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+
     }
 
-    public void showNotification(String title, String message) {
+    public void showNotification(String title, String message, String friend, String chatKey) {
         Intent notifyIntent = new Intent(this, com.possedev.smileby.EmotionActivity.class);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        notifyIntent.putExtra("friend", friend);
+        notifyIntent.putExtra("key", chatKey);
         PendingIntent pendingIntent = PendingIntent.getActivities(this, 0, new Intent[] { notifyIntent}, PendingIntent.FLAG_UPDATE_CURRENT);
         Notification notification = new Notification.Builder(this)
                 .setSmallIcon(android.R.drawable.ic_dialog_info)
