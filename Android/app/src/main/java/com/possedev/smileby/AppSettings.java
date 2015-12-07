@@ -18,7 +18,10 @@ public class AppSettings {
         if (getUsername().isEmpty()) {
             Random random = new Random();
             //setUsername("User" + random.nextInt(2000));
-            setUsername("anabanana");
+            setUsername("antti");
+        } else {
+            //TODO: Remove this when username setting is implemented.
+            setUsername("antti");
         }
     }
 

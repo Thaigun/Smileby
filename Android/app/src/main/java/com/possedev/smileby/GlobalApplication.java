@@ -34,8 +34,6 @@ public class GlobalApplication extends Application {
     public String userName;
     public AppSettings settings;
 
-    public User latestEncounter;
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -64,8 +62,6 @@ public class GlobalApplication extends Application {
                         if (snapshot.getChildrenCount() == 1) {
                             //The matching child node
                             DataSnapshot match = snapshot.getChildren().iterator().next();
-                            //The user that was encountered
-                            latestEncounter = match.getValue(User.class);
                             //Increment the encounters by one
                             incrementEncounters(match.getKey());
                         }
@@ -105,10 +101,12 @@ public class GlobalApplication extends Application {
             public void onDataChange(DataSnapshot snapshot) {
                 //The matching child nodes
                 Iterator<DataSnapshot> children = snapshot.getChildren().iterator();
+                Integer count = 0;
                 while (children.hasNext()) {
                     DataSnapshot child = children.next();
                     Encounter encounter = child.getValue(Encounter.class);
                     if (encounter.getUser2().equals(second)) {
+                        count++;
                         int newNumber = encounter.getEncounters() + 1;
                         firebaseRef.child("encounters/" + child.getKey() + "/encounters").setValue(newNumber);
                         //If enough encounters, show notification to open the quick message option.
@@ -119,6 +117,12 @@ public class GlobalApplication extends Application {
                             openQuickMessage(user2);
                         }
                     }
+                }
+
+                // If there was no encounters for these users, make one.
+                if (count == 0) {
+                    Encounter encounter = new Encounter(first, second, 1);
+                    firebaseRef.child("encounters").push().setValue(encounter);
                 }
             }
 

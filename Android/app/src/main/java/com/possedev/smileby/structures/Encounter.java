@@ -13,6 +13,12 @@ public class Encounter {
 
     }
 
+    public Encounter(String _user1, String _user2, int _encounters) {
+        user1 = _user1;
+        user2 = _user2;
+        encounters = _encounters;
+    }
+
     public String getUser1() { return user1; }
     public String getUser2() { return user2; }
     public int getEncounters() { return encounters; }
