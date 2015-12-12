@@ -1,0 +1,30 @@
+{
+  "users": [{
+    "*username": {
+      "beacon_id": "String",
+      "chats": [{
+        "*id": {
+          "*user2": true
+        }
+      }]
+    }
+  }],
+  "chats": [{
+    "*id": {
+      "members": [{
+        "*username": true
+      }],
+      "messages": [{
+        "sender": "String",
+        "message": "String"
+      }]
+    }
+  }],
+  "encounters": [{
+    "user1": "String",
+    "user2": "String",
+    "encounters": "Int"
+  }]
+}
+
+* means that the value changes from object to object.
